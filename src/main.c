@@ -4,9 +4,9 @@
 static Window *s_main_window;
 
 // Layers
-static BitmapLayer *s_bitmap_layer;
 static Layer *s_grid_layer;
 static TextLayer *s_time_layer;
+static Layer *s_charge_layer;
 
 #if 1
   // GRects (Vertical)
@@ -26,38 +26,12 @@ static TextLayer *s_time_layer;
   static struct GRect s_outline     = {{  1, 39}, {141,  90}};
 #endif
 
-// GPath
-static GPath *s_spiral_path_ptr = NULL;
-static const GPathInfo SPIRAL_PATH_INFO = {
-  .num_points = 24,
-  .points = (GPoint []) {
-    { 82,  43}, // (1L)
-    { 85,  54}, // (1L)
-    { 91,  59}, // (1L)
-    {101,  62}, // (1L), (1R)
-    {111,  60}, // (1R)
-    {117,  54}, // (1R)
-    {120,  44}, // (1R), (2)
-    {118,  29}, // (2)
-    {110,  17}, // (2)
-    {100,   9}, // (2)
-    { 91,   6}, // (2)
-    { 81,   4}, // (2), (3)
-    { 62,   9}, // (3)
-    { 45,  18}, // (3)
-    { 31,  33}, // (3)
-    { 25,  47}, // (3)
-    { 22,  63}, // (3), (5)
-    { 25,  86}, // (5)
-    { 32, 107}, // (5)
-    { 44, 125}, // (5)
-    { 61, 142}, // (5)
-    { 77, 151}, // (5)
-    { 96, 159}, // (5)
-    {121, 162}, // (5)
-  }
-};
-
+// GBitmap
+static GBitmap *s_spiral_image;
+static GBitmap *s_battery_image;
+static GBitmap *s_charging_image;
+static GBitmap *s_plugged_image;
+  
 // Global time
 static int s_curr_hour;
 static int s_curr_min;
@@ -123,14 +97,42 @@ static void grid_layer_update_callback(Layer *layer, GContext *ctx) {
   }
   
   // Draw spiral
-  graphics_context_set_stroke_color(ctx, GColorDarkGray);
-  graphics_context_set_stroke_width(ctx, 2);
-  gpath_draw_outline_open(ctx, s_spiral_path_ptr);
+  graphics_context_set_compositing_mode(ctx, GCompOpSet);
+  graphics_draw_bitmap_in_rect(ctx, s_spiral_image, gbitmap_get_bounds(s_spiral_image));
   
   // Draw the outline
   graphics_context_set_stroke_color(ctx, GColorDarkGray);
   graphics_context_set_stroke_width(ctx, 1);
   graphics_draw_rect(ctx, s_outline);
+}
+
+static void charge_layer_update_callback(Layer *layer, GContext *ctx) {
+  BatteryChargeState batChargeState = battery_state_service_peek();
+  GColor charge_color = GColorClear;
+  
+  // Select color for battery charge
+  if (batChargeState.charge_percent >= 60) charge_color = GColorGreen;
+  else if (batChargeState.charge_percent >= 25) charge_color = GColorYellow;
+  else charge_color = GColorRed;
+  
+  // Draw battery charge
+  graphics_context_set_fill_color(ctx, charge_color);
+  int h = (100 - batChargeState.charge_percent) / 5 + 1;
+  graphics_fill_rect(ctx, GRect(3, h, 8, 21 - h), 0, GCornerNone);
+  
+  // Draw battery outline
+  graphics_context_set_compositing_mode(ctx, GCompOpSet);
+  graphics_draw_bitmap_in_rect(ctx, s_battery_image, gbitmap_get_bounds(s_battery_image));
+
+  // Draw charging icon, if active
+  if (batChargeState.is_charging) {
+    graphics_draw_bitmap_in_rect(ctx, s_charging_image, gbitmap_get_bounds(s_charging_image));
+  } else
+  
+  // Draw plugged icon, if active
+  if (batChargeState.is_plugged) {
+    graphics_draw_bitmap_in_rect(ctx, s_plugged_image, gbitmap_get_bounds(s_plugged_image));
+  }
 }
 
 static void main_window_load(Window *window) {
@@ -145,9 +147,6 @@ static void main_window_load(Window *window) {
   // Add it as a child layer to the Window's root layer
   layer_add_child(root_layer, s_grid_layer);
 
-  // Create spiral path
-  s_spiral_path_ptr = gpath_create(&SPIRAL_PATH_INFO);
-  
   // Create time TextLayer
   s_time_layer = text_layer_create(GRect(root_bounds.origin.x, 65, root_bounds.size.w, 40));
   text_layer_set_background_color(s_time_layer, GColorClear);
@@ -160,15 +159,31 @@ static void main_window_load(Window *window) {
   // Add it as a child layer to the Window's root layer
   layer_add_child(root_layer, text_layer_get_layer(s_time_layer));
 
+  // Create charge layer
+  s_charge_layer = layer_create(GRect(127, 142, 15, 22));
+  layer_set_update_proc(s_charge_layer, charge_layer_update_callback);
+
+  // Add it as a child layer to the Window's root layer
+  layer_add_child(root_layer, s_charge_layer);
+  
+  // Createing bitmaps
+  s_spiral_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_SPIRAL);
+  s_battery_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BATTERY);
+  s_charging_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CHARGING);
+  s_plugged_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_PLUGGED);
+  
   // Make sure that the currnet time is displayed from the start
   update_time();
 }
 
 static void main_window_unload(Window *window) {
+  gbitmap_destroy(s_plugged_image);
+  gbitmap_destroy(s_charging_image);
+  gbitmap_destroy(s_battery_image);
+  gbitmap_destroy(s_spiral_image);
+  layer_destroy(s_charge_layer);
   text_layer_destroy(s_time_layer);
-  gpath_destroy(s_spiral_path_ptr);
   layer_destroy(s_grid_layer);
-  bitmap_layer_destroy(s_bitmap_layer);
 }
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
@@ -178,6 +193,10 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   s_curr_min = tick_time->tm_min;
 
   layer_mark_dirty(s_grid_layer);
+}
+
+void battery_charge_handler(BatteryChargeState charge) {
+  layer_mark_dirty(s_charge_layer);
 }
 
 void init(void) {
@@ -196,9 +215,14 @@ void init(void) {
 
   // Register with TickTimerService
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
+  
+  // Register with BatteryStateService
+  battery_state_service_subscribe(battery_charge_handler);
 }
 
 void deinit(void) {
+  battery_state_service_unsubscribe();
+  tick_timer_service_unsubscribe();
   window_destroy(s_main_window);
 }
 
