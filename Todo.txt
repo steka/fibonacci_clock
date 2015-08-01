@@ -1,15 +1,16 @@
 Bugs:
-Found	Fixed
-v0.2	N/A	Time doesn't show when the 5x5 box is white
-
+Found	Fixed	Description
+N/A	N/A	N/A
+		
 New features:
-Added
+Added	Description
 N/A	Rotate the image 90° counter-clockwise, to for text info above/below
+	(Tried it, but it became too small, I think. Code #ifdef'ed out)
+	
 N/A	View date, month and week number
 N/A	View bluetooth status
 N/A	View battery status
 N/A	Random between valid ways of colouring the boxes.
-N/A	View Spiral
 N/A	CONFIG: show/hide time layer (HH:MM as text)
 N/A	CONFIG: show/hide bluetooth status
 N/A	CONFIG: show/hide battery status

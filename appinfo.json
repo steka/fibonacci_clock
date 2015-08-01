@@ -13,11 +13,6 @@
                 "menuIcon": true,
                 "name": "MENU_ICON",
                 "type": "png"
-            },
-            {
-                "file": "images/Sample.png",
-                "name": "IMAGE_SAMPLE",
-                "type": "png"
             }
         ]
     },
@@ -27,7 +22,7 @@
         "basalt"
     ],
     "uuid": "1289bd91-5811-40a5-a270-e8f97c126f18",
-    "versionLabel": "0.2",
+    "versionLabel": "0.3",
     "watchapp": {
         "watchface": true
     }
