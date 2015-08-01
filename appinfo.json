@@ -9,23 +9,18 @@
     "resources": {
         "media": [
             {
-                "file": "images/spiral.png",
-                "name": "IMAGE_SPIRAL",
-                "type": "png"
-            },
-            {
                 "file": "images/charging.png",
                 "name": "IMAGE_CHARGING",
                 "type": "png"
             },
             {
-                "file": "images/plugged.png",
-                "name": "IMAGE_PLUGGED",
+                "file": "images/battery.png",
+                "name": "IMAGE_BATTERY",
                 "type": "png"
             },
             {
-                "file": "images/battery.png",
-                "name": "IMAGE_BATTERY",
+                "file": "images/plugged.png",
+                "name": "IMAGE_PLUGGED",
                 "type": "png"
             },
             {
@@ -42,7 +37,7 @@
         "basalt"
     ],
     "uuid": "1289bd91-5811-40a5-a270-e8f97c126f18",
-    "versionLabel": "0.4",
+    "versionLabel": "0.5",
     "watchapp": {
         "watchface": true
     }
