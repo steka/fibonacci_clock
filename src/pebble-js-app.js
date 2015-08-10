@@ -3,7 +3,7 @@ Pebble.addEventListener('ready', function(e) {
 });
 
 Pebble.addEventListener('showConfiguration', function(e) {
-  Pebble.openURL('https://www.googledrive.com/host/0By3m2JcE6XQ6TGU2QmVoNUdvYTA');
+  Pebble.openURL('https://www.googledrive.com/host/0By3m2JcE6XQ6NzVtS28wd1YtUzA');
 });
 
 Pebble.addEventListener('webviewclosed', function(e) {
