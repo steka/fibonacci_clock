@@ -4,31 +4,32 @@
     <script>
       var elementIds = [
         "ShowTime", /* "ShowDate", "ShowMonth", "ShowWeekNum", */ "ShowCharge",
-        /* "ShowBluetooth", */ "ShowSpiral", "HourColor", "MinuteColor", "HourMinuteColor",
+        "ShowBluetooth", "ShowSpiral", "HourColor", "MinuteColor", "HourMinuteColor",
         "NoneColor", "SpiralColor", "BackgroundColor", "GridColor", "DotColor",
-        "TimeColor", "OutlineColor"
+        "TimeColor", "OutlineColor", "VibeBluetooth"
       ];
 
       var defValue = [
         0,  // ShowTime
 /*
-	0,  // ShowDate
-	0,  // ShowMonth
-	0,  // ShowWeekNum
-*/	
-	1,  // ShowCharge
-//        0,  // ShowBluetooth
-	1,  // ShowSpiral
-	48, // HourColor
-	12, // MinuteColor
-	3,  // HourMinuteColor
+        0,  // ShowDate
+        0,  // ShowMonth
+        0,  // ShowWeekNum
+*/      
+        1,  // ShowCharge
+        1,  // ShowBluetooth
+        1,  // ShowSpiral
+        48, // HourColor
+        12, // MinuteColor
+        3,  // HourMinuteColor
         63, // NoneColor
-	56, // SpiralColor
-	0,  // BackgroundColor
-	0,  // GridColor
-	63, // DotColor
-        27, // TimeColor
-	21  // OutlineColor
+        56, // SpiralColor
+        0,  // BackgroundColor
+        0,  // GridColor
+        63, // DotColor
+        64, // TimeColor
+        21, // OutlineColor
+	1   // VibeBluetooth
       ];
 
 
@@ -54,7 +55,7 @@
           "Red", "Folly", "FashionMagenta", "Magenta", "Orange", "SunsetOrange", "BrilliantRose", "ShockingPink",
           "ChromeYellow", "Rajah", "Melon", "RichBrilliantLavender", "Yellow", "Icterine", "PastelYellow", "White"
         ];
-
+        
         for (var i = 0; i < 64; i++) {
           var opt = document.createElement('option');
           var hexR = expColor((i >> 4) & 0x03);
@@ -68,24 +69,29 @@
           }
           opt.setAttribute("style", "background-color:#" + rgb2hex(hexR, hexG, hexB) + "; color:#" + txtCol)
           opt.setAttribute("value", 192 + i)
-	  if (i == 5) opt.setAttribute("selected", true);
           opt.innerHTML = colors[i];
           element.appendChild(opt);
         }
+	if (element.id == "TimeColor") {
+          var opt = document.createElement('option');
+          opt.setAttribute("value", 256)
+          opt.innerHTML = "(Legible color)";
+          element.appendChild(opt);
+	}
       }
 
       function OnLoadHandler() {
         document.getElementById("Save").addEventListener("click", SaveHandler);
         for (var id in elementIds) {
           var element = document.getElementById(elementIds[id]);
-	  var def = localStorage.getItem(elementIds[id]);
+          var def = localStorage.getItem(elementIds[id]);
           if (document.getElementById(elementIds[id] + "Preview")) {
             AddColorOptions(element);
             element.addEventListener("change", UpdatePreviews);
-	    if (def) def = def - 192;
-	  }
-	  if (!def) def = defValue[id];	    
-	  element.options[def].selected = true;
+            if (def) def = def - 192;
+          }
+          if (!def) def = defValue[id];     
+          element.options[def].selected = true;
         }
         UpdatePreviews();
       };
@@ -133,6 +139,7 @@
     <p><select id="ShowTime">
       <option value="0">Hide</option>
       <option value="1">Show</option>
+      <option value="2">Show on tap</option>
     </select> time with digits</p>
 <!--
     <p><select id="ShowDate">
@@ -154,12 +161,17 @@
       <option value="0">Hide</option>
       <option value="1">Show</option>
     </select> battery charge</p>
-<!--
+
     <p><select id="ShowBluetooth">
       <option value="0">Hide</option>
       <option value="1">Show</option>
     </select> bluetooth connection</p>
--->
+
+    <p><select id="VibeBluetooth">
+      <option value="0">Silent</option>
+      <option value="1">Vibe</option>
+    </select> when loosing bluetooth connection</p>
+
     <p><select id="ShowSpiral">
       <option value="0">Hide</option>
       <option value="1">Show</option>
