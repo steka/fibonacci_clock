@@ -3,19 +3,19 @@
     <title>Fibonacci Clock Settings</title>
     <script>
       var elementIds = [
-        "ShowTime", /* "ShowDate", "ShowMonth", "ShowWeekNum", */ "ShowCharge",
+        "ShowTime", "ShowDate", /* "ShowMonth", */ "ShowWeekNum", "ShowCharge",
         "ShowBluetooth", "ShowSpiral", "HourColor", "MinuteColor", "HourMinuteColor",
         "NoneColor", "SpiralColor", "BackgroundColor", "GridColor", "DotColor",
-        "TimeColor", "OutlineColor", "VibeBluetooth"
+        "TimeColor", "OutlineColor", "VibeBluetooth", "FiboDisplay"
       ];
 
       var defValue = [
         0,  // ShowTime
-/*
         0,  // ShowDate
+/*
         0,  // ShowMonth
+*/
         0,  // ShowWeekNum
-*/      
         1,  // ShowCharge
         1,  // ShowBluetooth
         1,  // ShowSpiral
@@ -29,7 +29,8 @@
         63, // DotColor
         64, // TimeColor
         21, // OutlineColor
-	1   // VibeBluetooth
+	1,  // VibeBluetooth
+	0,  // FiboDisplay
       ];
 
 
@@ -141,22 +142,22 @@
       <option value="1">Show</option>
       <option value="2">Show on tap</option>
     </select> time with digits</p>
-<!--
+
     <p><select id="ShowDate">
       <option value="0">Hide</option>
       <option value="1">Show</option>
     </select> date</p>
-
+<!--
     <p><select id="ShowMonth">
       <option value="0">Hide</option>
       <option value="1">Show</option>
     </select> month</p>
- 
+ -->
     <p><select id="ShowWeekNum">
       <option value="0">Hide</option>
       <option value="1">Show</option>
     </select> week number</p>
--->
+
     <p><select id="ShowCharge">
       <option value="0">Hide</option>
       <option value="1">Show</option>
@@ -177,6 +178,11 @@
       <option value="1">Show</option>
     </select> spiral</p>
 
+    <p><select id="FiboDisplay">
+      <option value="0">Fit</option>
+      <option value="1">Zoom</option>
+    </select> display</p>
+    
     <p><select id="HourColor"></select>
     <span id="HourColorPreview" style="border:1px solid">&nbsp;&nbsp;&nbsp;&nbsp;</span> Hour color</p>
 

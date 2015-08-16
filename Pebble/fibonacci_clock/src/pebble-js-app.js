@@ -3,7 +3,7 @@ Pebble.addEventListener('ready', function(e) {
 });
 
 Pebble.addEventListener('showConfiguration', function(e) {
-  Pebble.openURL('https://www.googledrive.com/host/0By3m2JcE6XQ6NzVtS28wd1YtUzA');
+  Pebble.openURL('https://www.googledrive.com/host/0By3m2JcE6XQ6QnRuLVh6Vy1fTG8');
 });
 
 Pebble.addEventListener('webviewclosed', function(e) {
@@ -11,7 +11,7 @@ Pebble.addEventListener('webviewclosed', function(e) {
 //  console.log('Config window returned: ', JSON.stringify(config_data));
 
   Pebble.sendAppMessage(config_data, function() {
-//    console.log('Sent config data to Pebble');  
+//    console.log('Sent config data to Pebble');
   }, function() {
 //    console.log('Failed to send config data!');
   });

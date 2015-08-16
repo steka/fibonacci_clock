@@ -2,6 +2,7 @@
     "appKeys": {
         "BackgroundColor": 13,
         "DotColor": 15,
+        "FiboDisplay": 20,
         "GridColor": 14,
         "HourColor": 8,
         "HourMinuteColor": 10,
@@ -28,26 +29,6 @@
     "resources": {
         "media": [
             {
-                "file": "images/cross.png",
-                "name": "IMAGE_CROSS",
-                "type": "png"
-            },
-            {
-                "file": "images/bluetooth.png",
-                "name": "IMAGE_BLUETOOTH",
-                "type": "png"
-            },
-            {
-                "file": "images/plugged.png",
-                "name": "IMAGE_PLUGGED",
-                "type": "png"
-            },
-            {
-                "file": "images/charging.png",
-                "name": "IMAGE_CHARGING",
-                "type": "png"
-            },
-            {
                 "file": "images/battery.png",
                 "name": "IMAGE_BATTERY",
                 "type": "png"
@@ -56,6 +37,26 @@
                 "file": "images/MenuIcon.png",
                 "menuIcon": true,
                 "name": "MENU_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/charging.png",
+                "name": "IMAGE_CHARGING",
+                "type": "png"
+            },
+            {
+                "file": "images/plugged.png",
+                "name": "IMAGE_PLUGGED",
+                "type": "png"
+            },
+            {
+                "file": "images/cross.png",
+                "name": "IMAGE_CROSS",
+                "type": "png"
+            },
+            {
+                "file": "images/bluetooth.png",
+                "name": "IMAGE_BLUETOOTH",
                 "type": "png"
             }
         ]
@@ -66,7 +67,7 @@
         "basalt"
     ],
     "uuid": "1289bd91-5811-40a5-a270-e8f97c126f18",
-    "versionLabel": "0.7",
+    "versionLabel": "0.8",
     "watchapp": {
         "watchface": true
     }
