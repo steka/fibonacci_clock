@@ -6,15 +6,18 @@
 // BEGIN AUTO-GENERATED UI CODE; DO NOT MODIFY
 static Window *s_window;
 static GFont s_res_bitham_30_black;
+static GFont s_res_gothic_18;
 static Layer *s_fibo_layer;
-static TextLayer *s_time_layer;
-static Layer *s_charge_layer;
 static Layer *s_arc5x5_layer;
 static Layer *s_arc3x3_layer;
 static Layer *s_arc2x2_layer;
 static Layer *s_arc1x1L_layer;
 static Layer *s_arc1x1R_layer;
+static Layer *s_charge_layer;
 static Layer *s_bluetooth_layer;
+static TextLayer *s_time_layer;
+static TextLayer *s_date_layer;
+static TextLayer *s_week_layer;
 
 static void initialise_ui(void) {
   s_window = window_create();
@@ -24,21 +27,10 @@ static void initialise_ui(void) {
   #endif
 
   s_res_bitham_30_black = fonts_get_system_font(FONT_KEY_BITHAM_30_BLACK);
+  s_res_gothic_18 = fonts_get_system_font(FONT_KEY_GOTHIC_18);
   // s_fibo_layer
-  s_fibo_layer = layer_create(GRect(19, 1, 105, 165));
+  s_fibo_layer = layer_create(GRect(0, 0, 144, 168));
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_fibo_layer);
-
-  // s_time_layer
-  s_time_layer = text_layer_create(GRect(0, 65, 144, 40));
-  text_layer_set_background_color(s_time_layer, GColorClear);
-  text_layer_set_text(s_time_layer, "10:30");
-  text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
-  text_layer_set_font(s_time_layer, s_res_bitham_30_black);
-  layer_add_child(window_get_root_layer(s_window), (Layer *)s_time_layer);
-
-  // s_charge_layer
-  s_charge_layer = layer_create(GRect(127, 142, 15, 22));
-  layer_add_child(window_get_root_layer(s_window), (Layer *)s_charge_layer);
 
   // s_arc5x5_layer
   s_arc5x5_layer = layer_create(GRect(21, 63, 101, 101));
@@ -60,50 +52,107 @@ static void initialise_ui(void) {
   s_arc1x1R_layer = layer_create(GRect(101, 43, 21, 21));
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_arc1x1R_layer);
 
+  // s_charge_layer
+  s_charge_layer = layer_create(GRect(127, 144, 15, 22));
+  layer_add_child(window_get_root_layer(s_window), (Layer *)s_charge_layer);
+
   // s_bluetooth_layer
-  s_bluetooth_layer = layer_create(GRect(0, 141, 18, 22));
+  s_bluetooth_layer = layer_create(GRect(2, 144, 18, 22));
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_bluetooth_layer);
+
+  // s_time_layer
+  s_time_layer = text_layer_create(GRect(0, 65, 144, 40));
+  text_layer_set_background_color(s_time_layer, GColorClear);
+  text_layer_set_text_color(s_time_layer, GColorWhite);
+  text_layer_set_text(s_time_layer, "10:30");
+  text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
+  text_layer_set_font(s_time_layer, s_res_bitham_30_black);
+  layer_add_child(window_get_root_layer(s_window), (Layer *)s_time_layer);
+
+  // s_date_layer
+  s_date_layer = text_layer_create(GRect(0, 96, 144, 24));
+  text_layer_set_background_color(s_date_layer, GColorClear);
+  text_layer_set_text_color(s_date_layer, GColorWhite);
+  text_layer_set_text(s_date_layer, "16 Aug");
+  text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
+  text_layer_set_font(s_date_layer, s_res_gothic_18);
+  layer_add_child(window_get_root_layer(s_window), (Layer *)s_date_layer);
+
+  // s_week_layer
+  s_week_layer = text_layer_create(GRect(0, 112, 144, 24));
+  text_layer_set_background_color(s_week_layer, GColorClear);
+  text_layer_set_text_color(s_week_layer, GColorWhite);
+  text_layer_set_text(s_week_layer, "w33");
+  text_layer_set_text_alignment(s_week_layer, GTextAlignmentCenter);
+  text_layer_set_font(s_week_layer, s_res_gothic_18);
+  layer_add_child(window_get_root_layer(s_window), (Layer *)s_week_layer);
 }
 
 static void destroy_ui(void) {
   window_destroy(s_window);
   layer_destroy(s_fibo_layer);
-  text_layer_destroy(s_time_layer);
-  layer_destroy(s_charge_layer);
   layer_destroy(s_arc5x5_layer);
   layer_destroy(s_arc3x3_layer);
   layer_destroy(s_arc2x2_layer);
   layer_destroy(s_arc1x1L_layer);
   layer_destroy(s_arc1x1R_layer);
+  layer_destroy(s_charge_layer);
   layer_destroy(s_bluetooth_layer);
+  text_layer_destroy(s_time_layer);
+  text_layer_destroy(s_date_layer);
+  text_layer_destroy(s_week_layer);
 }
 // END AUTO-GENERATED UI CODE
 
-#if 1
-  // GRects (Vertical)
-  static struct GRect s_3x3_square  = {{ 2,  2}, { 61,  61}}; // 3x3 Square
-  static struct GRect s_2x2_square  = {{62,  2}, { 41,  41}}; // 2x2 Square
-  static struct GRect s_1x1L_square = {{62, 42}, { 21,  21}}; // 1x1 Square (left)
-  static struct GRect s_1x1R_square = {{82, 42}, { 21,  21}}; // 1x1 Square (right)
-  static struct GRect s_5x5_square  = {{ 2, 62}, {101, 101}}; // 5x5 Square
-  static struct GRect s_outline     = {{ 0,  0}, {105, 165}};
-#elif 0
-  // GRects (Vertical)  (WARNING! coordinates are for the OLD layer position/size, replaced by above)
-  static struct GRect s_3x3_square  = {{ 21,  3}, { 61,  61}}; // 3x3 Square
-  static struct GRect s_2x2_square  = {{ 81,  3}, { 41,  41}}; // 2x2 Square
-  static struct GRect s_1x1L_square = {{ 81, 43}, { 21,  21}}; // 1x1 Square (left)
-  static struct GRect s_1x1R_square = {{101, 43}, { 21,  21}}; // 1x1 Square (right)
-  static struct GRect s_5x5_square  = {{ 21, 63}, {101, 101}}; // 5x5 Square
-  static struct GRect s_outline     = {{ 19,  1}, {105, 165}};
-#else
-  // GRects (Horizontal)  (WARNING! coordinates are for the OLD layer position/size)
-  static struct GRect s_3x3_square  = {{ 3,  75}, { 52,  52}}; // 3x3 Square
-  static struct GRect s_2x2_square  = {{ 3,  41}, { 35,  35}}; // 2x2 Square
-  static struct GRect s_1x1L_square = {{ 37, 58}, { 18,  18}}; // 1x1 Square (bottom)
-  static struct GRect s_1x1R_square = {{ 37, 41}, { 18,  18}}; // 1x1 Square (top)
-  static struct GRect s_5x5_square  = {{ 54, 41}, { 86,  86}}; // 5x5 Square
-  static struct GRect s_outline     = {{  1, 39}, {141,  90}};
-#endif
+enum {
+  FiboDispVertical,
+  FiboDispZoomed,
+//  FiboDispHorzontal // Not fully implemented yet (needs to rotate or move center of each arc)
+};
+
+static struct {
+  struct GRect s_3x3_square;
+  struct GRect s_2x2_square;
+  struct GRect s_1x1L_square;
+  struct GRect s_1x1R_square;
+  struct GRect s_5x5_square;
+  struct GRect s_outline;
+  struct GRect s_time;
+  struct GRect s_date;
+  struct GRect s_week;
+} fibo[] = {
+  { // FiboDispVertical
+    .s_3x3_square  = {{ 21,   3}, { 61,  61}}, // 3x3 Square
+    .s_2x2_square  = {{ 81,   3}, { 41,  41}}, // 2x2 Square
+    .s_1x1L_square = {{ 81,  43}, { 21,  21}}, // 1x1 Square (left)
+    .s_1x1R_square = {{101,  43}, { 21,  21}}, // 1x1 Square (right)
+    .s_5x5_square  = {{ 21,  63}, {101, 101}}, // 5x5 Square
+    .s_outline     = {{ 19,   1}, {105, 165}}, // outline
+    .s_time        = {{  0,  65}, {144,  40}},
+    .s_date        = {{  0,  96}, {144,  40}},
+    .s_week        = {{  0, 112}, {144,  40}},
+  }, { // FiboDispZoomed
+    .s_3x3_square  = {{  1,   1}, { 85,  85}}, // 3x3 Square
+    .s_2x2_square  = {{ 85,   1}, { 57,  57}}, // 2x2 Square
+    .s_1x1L_square = {{ 85,  57}, { 29,  29}}, // 1x1 Square (left)
+    .s_1x1R_square = {{113,  57}, { 29,  29}}, // 1x1 Square (right)
+    .s_5x5_square  = {{  1,  85}, {141,  85}}, // 5x5 Square
+    .s_outline     = {{ -1,  -1}, {146, 170}}, // outline (hide it outside the view)
+    .s_time        = {{  0,  81}, {144,  40}},
+    .s_date        = {{  0, 112}, {144,  40}},
+    .s_week        = {{  0, 128}, {144,  40}},
+//  }, { // FiboDispHorzontal, Not fully implemented yet (needs to rotate or move center of each arc)
+//    .s_3x3_square  = {{ 3,  75}, { 52,  52}}, // 3x3 Square
+//    .s_2x2_square  = {{ 3,  41}, { 35,  35}}, // 2x2 Square
+//    .s_1x1L_square = {{ 37, 58}, { 18,  18}}, // 1x1 Square (bottom)
+//    .s_1x1R_square = {{ 37, 41}, { 18,  18}}, // 1x1 Square (top)
+//    .s_5x5_square  = {{ 54, 41}, { 86,  86}}, // 5x5 Square
+//    .s_outline     = {{  1, 39}, {141,  90}}, // outline
+//    .s_time        = {{  ?,  ?}, {  ?,   ?}},
+//    .s_date        = {{  ?,  ?}, {  ?,   ?}},
+//    .s_week        = {{  ?,  ?}, {  ?,   ?}},
+  }
+};
 
 // GBitmap
 static GBitmap *s_battery_image;
@@ -136,7 +185,8 @@ enum {  // DON'T CHANGE THE ORDER OF THESES!!!
   ConfTimeColor,
   ConfOutlineColor,
   ConfVibeBluetooth,
-  ConfShowTimeOnTap // Does not come from config page as separate key (included in ConfShowTime)
+  ConfShowTimeOnTap, // Does not come from config page as separate key (included in ConfShowTime)
+  ConfFiboDisplay,
 };
 
 static struct {
@@ -160,9 +210,10 @@ static struct {
   GColor timeColor;
   GColor outlineColor;
   bool legibleText; // Use legible color instead of timeColor
+  uint8_t fiboDisplay;
 } conf = {  // Set up default value
   .showTime        = false,
-  .showTimeOnTap = false,
+  .showTimeOnTap   = false,
   .showDate        = false,
   .showMonth       = false,
   .showWeekNum     = false,
@@ -180,31 +231,12 @@ static struct {
   .dotColor        = {.argb = GColorWhiteARGB8},
   .timeColor       = {.argb = GColorPictonBlueARGB8},
   .outlineColor    = {.argb = GColorDarkGrayARGB8},
-  .legibleText = true,
+  .legibleText     = true,
+  .fiboDisplay     = FiboDispVertical,
 };
 
 static void handle_window_unload(Window* window) {
   destroy_ui();
-}
-
-static void update_time() {
-  // Create a long-lived buffer
-  static char time_str[] = "hh:mm";
-
-  // Write the current hours and minutes into the buffer
-  clock_copy_time_string(time_str, sizeof(time_str));
-
-#if USE_FIXED_TIME_FOR_PUBLISHING_IMAGE
-  strcpy(time_str, "10:30");
-#endif
-
-  // Update current time on the TextLayer
-  text_layer_set_text_color(s_time_layer, conf.timeColor);
-  text_layer_set_text(s_time_layer, time_str);
-
-  layer_set_hidden(text_layer_get_layer(s_time_layer), !conf.showTime);
-
-  layer_mark_dirty(s_fibo_layer);
 }
 
 static void draw_spiral_arc(GContext *ctx, GPoint center, uint16_t radius ) {
@@ -262,11 +294,6 @@ static void fibo_layer_update_callback(Layer *layer, GContext *ctx) {
   fill_color[2] = conf.minuteColor;
   fill_color[3] = conf.hourMinuteColor;
 
-#if USE_FIXED_TIME_FOR_PUBLISHING_IMAGE
-  h = 10;
-  m = 30 / 5;
-#endif
-
   // Determine what fill color to use in each box
   if (h >= 5) { fc5  |= 0x01; h -= 5; }
   if (h >= 3) { fc3  |= 0x01; h -= 3; }
@@ -282,30 +309,34 @@ static void fibo_layer_update_callback(Layer *layer, GContext *ctx) {
 
   // Draw the time boxes
   graphics_context_set_fill_color(ctx, fill_color[fc3]);
-  graphics_fill_rect(ctx, s_3x3_square, 0, GCornerNone);
+  graphics_fill_rect(ctx, fibo[conf.fiboDisplay].s_3x3_square, 0, GCornerNone);
   graphics_context_set_fill_color(ctx, fill_color[fc2]);
-  graphics_fill_rect(ctx, s_2x2_square, 0, GCornerNone);
+  graphics_fill_rect(ctx, fibo[conf.fiboDisplay].s_2x2_square, 0, GCornerNone);
   graphics_context_set_fill_color(ctx, fill_color[fc1L]);
-  graphics_fill_rect(ctx, s_1x1L_square, 0, GCornerNone);
+  graphics_fill_rect(ctx, fibo[conf.fiboDisplay].s_1x1L_square, 0, GCornerNone);
   graphics_context_set_fill_color(ctx, fill_color[fc1R]);
-  graphics_fill_rect(ctx, s_1x1R_square, 0, GCornerNone);
+  graphics_fill_rect(ctx, fibo[conf.fiboDisplay].s_1x1R_square, 0, GCornerNone);
   graphics_context_set_fill_color(ctx, fill_color[fc5]);
   text_layer_set_text_color(s_time_layer, conf.legibleText ? gcolor_legible_over(fill_color[fc5]): conf.timeColor);
-  graphics_fill_rect(ctx, s_5x5_square, 0, GCornerNone);
+  graphics_fill_rect(ctx, fibo[conf.fiboDisplay].s_5x5_square, 0, GCornerNone);
 
   // Draw the grid
   graphics_context_set_stroke_color(ctx, conf.gridColor);
   graphics_context_set_stroke_width(ctx, 3);
-  graphics_draw_rect(ctx, s_3x3_square);
-  graphics_draw_rect(ctx, s_2x2_square);
-  graphics_draw_rect(ctx, s_1x1L_square);
-  graphics_draw_rect(ctx, s_1x1R_square);
-  graphics_draw_rect(ctx, s_5x5_square);
+  graphics_draw_rect(ctx, fibo[conf.fiboDisplay].s_3x3_square);
+  graphics_draw_rect(ctx, fibo[conf.fiboDisplay].s_2x2_square);
+  graphics_draw_rect(ctx, fibo[conf.fiboDisplay].s_1x1L_square);
+  graphics_draw_rect(ctx, fibo[conf.fiboDisplay].s_1x1R_square);
+  graphics_draw_rect(ctx, fibo[conf.fiboDisplay].s_5x5_square);
 
   // Draw the grid dots
   graphics_context_set_stroke_color(ctx, conf.dotColor);
-  for (int16_t y = s_outline.origin.y + 2; y <= s_outline.origin.y + s_outline.size.h; y += s_1x1L_square.size.h - 1) {
-    for (int16_t x = s_outline.origin.x + 2; x <= s_outline.origin.x + s_outline.size.w; x += s_1x1L_square.size.w - 1) {
+  for (int16_t y = fibo[conf.fiboDisplay].s_outline.origin.y + 2;
+       y <= fibo[conf.fiboDisplay].s_outline.origin.y + fibo[conf.fiboDisplay].s_outline.size.h;
+       y += fibo[conf.fiboDisplay].s_1x1L_square.size.h - 1) {
+    for (int16_t x = fibo[conf.fiboDisplay].s_outline.origin.x + 2;
+         x <= fibo[conf.fiboDisplay].s_outline.origin.x + fibo[conf.fiboDisplay].s_outline.size.w;
+         x += fibo[conf.fiboDisplay].s_1x1L_square.size.w - 1) {
       graphics_draw_pixel(ctx, GPoint(x, y));
     }
   }
@@ -313,7 +344,7 @@ static void fibo_layer_update_callback(Layer *layer, GContext *ctx) {
   // Draw the outline
   graphics_context_set_stroke_color(ctx, conf.outlineColor);
   graphics_context_set_stroke_width(ctx, 1);
-  graphics_draw_rect(ctx, s_outline);
+  graphics_draw_rect(ctx, fibo[conf.fiboDisplay].s_outline);
 }
 
 static void charge_layer_update_callback(Layer *layer, GContext *ctx) {
@@ -321,35 +352,69 @@ static void charge_layer_update_callback(Layer *layer, GContext *ctx) {
   GColor charge_color = GColorClear;
 
   // Select color for battery charge
-  if (batChargeState.charge_percent >= 60) charge_color = GColorGreen;
-  else if (batChargeState.charge_percent >= 25) charge_color = GColorYellow;
-  else charge_color = GColorRed;
+  if (batChargeState.charge_percent >= 60) {
+    charge_color = GColorGreen;
+  } else if (batChargeState.charge_percent >= 25) {
+    charge_color = GColorYellow;
+  } else {
+    charge_color = GColorRed;
+  }
 
   // Draw battery charge
   graphics_context_set_fill_color(ctx, charge_color);
   int h = (100 - batChargeState.charge_percent) / 5 + 1;
   graphics_fill_rect(ctx, GRect(3, h, 8, 21 - h), 0, GCornerNone);
 
+  // Clear overwritten part (outside of battery)
+  graphics_context_set_stroke_color(ctx, GColorClear);
+  graphics_draw_pixel(ctx, GPoint(3, 1));
+  graphics_draw_pixel(ctx, GPoint(10, 1));
+
   // Draw battery outline
   graphics_context_set_compositing_mode(ctx, GCompOpSet);
   graphics_draw_bitmap_in_rect(ctx, s_battery_image, gbitmap_get_bounds(s_battery_image));
 
-  // Draw charging icon, if active
   if (batChargeState.is_charging) {
+    // Draw charging icon
     graphics_draw_bitmap_in_rect(ctx, s_charging_image, gbitmap_get_bounds(s_charging_image));
-  } else
-
-  // Draw plugged icon, if active
-  if (batChargeState.is_plugged) {
+  } else if (batChargeState.is_plugged) {
+    // Draw plugged icon
     graphics_draw_bitmap_in_rect(ctx, s_plugged_image, gbitmap_get_bounds(s_plugged_image));
   }
 }
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
-  s_curr_hour = (tick_time->tm_hour > 12) ? tick_time->tm_hour - 12 : tick_time->tm_hour;
-  s_curr_min = tick_time->tm_min;
+  // Create a long-lived buffer
+  static char time_str[] = "hh:mm";
+  static char date_str[] = "Ddd dd Mmm";
+  static char week_str[] = "wWW";
 
-  update_time();
+  if ((tick_time != NULL) && (units_changed = HOUR_UNIT | MINUTE_UNIT)) {
+    s_curr_hour = (tick_time->tm_hour > 12) ? tick_time->tm_hour - 12 : tick_time->tm_hour;
+    s_curr_min = tick_time->tm_min;
+
+    // Write the current hours and minutes into the buffer
+    strftime(time_str, sizeof(time_str), clock_is_24h_style() ? "%H:%M" : "%I:%M", tick_time);
+  }
+
+#if USE_FIXED_TIME_FOR_PUBLISHING_IMAGE
+  s_curr_hour = 10;
+  s_curr_min = 30;
+  strcpy(time_str, "10:30");
+#endif
+
+  // Update current time on the TextLayer
+  text_layer_set_text_color(s_time_layer, conf.timeColor);
+  text_layer_set_text(s_time_layer, time_str);
+
+  if ((tick_time != NULL) && (units_changed = DAY_UNIT)) {
+    strftime(date_str, sizeof(date_str), "%a %d %b", tick_time);
+    text_layer_set_text(s_date_layer, date_str);
+
+    strftime(week_str, sizeof(week_str), "w%V", tick_time);
+    text_layer_set_text(s_week_layer, week_str);
+  }
+  layer_mark_dirty(s_fibo_layer);
 }
 
 static void battery_charge_handler(BatteryChargeState charge) {
@@ -389,19 +454,19 @@ static void load_config(void) {
   if (persist_exists(ConfShowDate)) {
     conf.showDate = persist_read_bool(ConfShowDate);
 //    APP_LOG(APP_LOG_LEVEL_INFO, "Load config showDate = %d", conf.showDate);
-    // Todo
+    layer_set_hidden(text_layer_get_layer(s_date_layer), !(conf.showDate || conf.showMonth));
   }
 
   if (persist_exists(ConfShowMonth)) {
     conf.showMonth = persist_read_bool(ConfShowMonth);
 //    APP_LOG(APP_LOG_LEVEL_INFO, "Load config showMonth = %d", conf.showMonth);
-    // Todo
+    layer_set_hidden(text_layer_get_layer(s_date_layer), !(conf.showDate || conf.showMonth));
   }
 
   if (persist_exists(ConfShowWeekNum)) {
     conf.showWeekNum = persist_read_bool(ConfShowWeekNum);
 //    APP_LOG(APP_LOG_LEVEL_INFO, "Load config showWeekNum = %d", conf.showWeekNum);
-    // Todo
+    layer_set_hidden(text_layer_get_layer(s_week_layer), !conf.showWeekNum);
   }
 
   if (persist_exists(ConfShowCharge)) {
@@ -488,13 +553,27 @@ static void load_config(void) {
     conf.legibleText = (value == 256);
     conf.timeColor.argb = (uint8_t)(value & 0xFF);
 //    APP_LOG(APP_LOG_LEVEL_INFO, "Load config timeColor = %d", conf.timeColor.argb);
-    update_time();
+    tick_handler(NULL, (TimeUnits)0);
   }
 
   if (persist_exists(ConfOutlineColor)) {
     conf.outlineColor.argb = persist_read_int(ConfOutlineColor);
 //    APP_LOG(APP_LOG_LEVEL_INFO, "Load config outlineColor = %d", conf.outlineColor.argb);
     layer_mark_dirty(s_fibo_layer);
+  }
+
+  if (persist_exists(ConfFiboDisplay)) {
+    conf.fiboDisplay = persist_read_int(ConfFiboDisplay);
+//    APP_LOG(APP_LOG_LEVEL_INFO, "Load config fiboDisplay = %d", conf.fiboDisplay);
+    layer_mark_dirty(s_fibo_layer);
+    layer_set_frame(s_arc1x1L_layer, fibo[conf.fiboDisplay].s_1x1L_square);
+    layer_set_frame(s_arc1x1R_layer, fibo[conf.fiboDisplay].s_1x1R_square);
+    layer_set_frame(s_arc2x2_layer,  fibo[conf.fiboDisplay].s_2x2_square);
+    layer_set_frame(s_arc3x3_layer,  fibo[conf.fiboDisplay].s_3x3_square);
+    layer_set_frame(s_arc5x5_layer,  fibo[conf.fiboDisplay].s_5x5_square);
+    layer_set_frame(text_layer_get_layer(s_time_layer), fibo[conf.fiboDisplay].s_time);
+    layer_set_frame(text_layer_get_layer(s_date_layer), fibo[conf.fiboDisplay].s_date);
+    layer_set_frame(text_layer_get_layer(s_week_layer), fibo[conf.fiboDisplay].s_week);
   }
 }
 
@@ -539,17 +618,17 @@ static void inbox_received_handler(DictionaryIterator *iterator, void *context) 
       case ConfShowDate:
         conf.showDate = atoi(t->value->cstring);
         persist_write_bool(t->key, conf.showDate);
-        // Todo
+        layer_set_hidden(text_layer_get_layer(s_date_layer), !(conf.showDate || conf.showMonth));
         break;
       case ConfShowMonth:
         conf.showMonth = atoi(t->value->cstring);
         persist_write_bool(t->key, conf.showMonth);
-        // Todo
+        layer_set_hidden(text_layer_get_layer(s_date_layer), !(conf.showDate || conf.showMonth));
         break;
       case ConfShowWeekNum:
         conf.showWeekNum = atoi(t->value->cstring);
         persist_write_bool(t->key, conf.showWeekNum);
-        // Todo
+        layer_set_hidden(text_layer_get_layer(s_week_layer), !conf.showWeekNum);
         break;
       case ConfShowCharge:
         conf.showCharge = atoi(t->value->cstring);
@@ -607,7 +686,7 @@ static void inbox_received_handler(DictionaryIterator *iterator, void *context) 
         conf.backgroundColor = (GColor){.argb = atoi(t->value->cstring)};
         persist_write_int(t->key, conf.backgroundColor.argb);
         window_set_background_color(s_window, conf.backgroundColor);
-        }  break;
+      }  break;
       case ConfGridColor:
         conf.gridColor = (GColor){.argb = atoi(t->value->cstring)};
         persist_write_int(t->key, conf.gridColor.argb);
@@ -623,12 +702,25 @@ static void inbox_received_handler(DictionaryIterator *iterator, void *context) 
         conf.legibleText = (value == 256);
         conf.timeColor = (GColor){.argb = (uint8_t)(value & 0xFF)};
         persist_write_int(t->key, value);
-        update_time();
+        tick_handler(NULL, (TimeUnits)0);
       } break;
       case ConfOutlineColor:
         conf.outlineColor = (GColor){.argb = atoi(t->value->cstring)};
         persist_write_int(t->key, conf.outlineColor.argb);
         layer_mark_dirty(s_fibo_layer);
+        break;
+      case ConfFiboDisplay:
+        conf.fiboDisplay = atoi(t->value->cstring);
+        persist_write_int(t->key, conf.fiboDisplay);
+        layer_mark_dirty(s_fibo_layer);
+        layer_set_frame(s_arc1x1L_layer, fibo[conf.fiboDisplay].s_1x1L_square);
+        layer_set_frame(s_arc1x1R_layer, fibo[conf.fiboDisplay].s_1x1R_square);
+        layer_set_frame(s_arc2x2_layer,  fibo[conf.fiboDisplay].s_2x2_square);
+        layer_set_frame(s_arc3x3_layer,  fibo[conf.fiboDisplay].s_3x3_square);
+        layer_set_frame(s_arc5x5_layer,  fibo[conf.fiboDisplay].s_5x5_square);
+        layer_set_frame(text_layer_get_layer(s_time_layer), fibo[conf.fiboDisplay].s_time);
+        layer_set_frame(text_layer_get_layer(s_date_layer), fibo[conf.fiboDisplay].s_date);
+        layer_set_frame(text_layer_get_layer(s_week_layer), fibo[conf.fiboDisplay].s_week);
         break;
     }
     t = dict_read_next(iterator);
@@ -672,8 +764,14 @@ void show_main(void) {
   app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
   load_config();
 
+  layer_set_hidden(text_layer_get_layer(s_time_layer), !conf.showTime);
+  layer_set_hidden(text_layer_get_layer(s_date_layer), !(conf.showDate || conf.showMonth));
+  layer_set_hidden(text_layer_get_layer(s_week_layer), !conf.showWeekNum);
+
   // Make sure that the currnet time is displayed from the start
-  update_time();
+  time_t temp = time(NULL);
+  struct tm *tick_time = localtime(&temp);
+  tick_handler(tick_time, YEAR_UNIT | MONTH_UNIT | DAY_UNIT | HOUR_UNIT | MINUTE_UNIT | SECOND_UNIT);
 }
 
 void hide_main(void) {
