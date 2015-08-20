@@ -6,7 +6,7 @@
 // BEGIN AUTO-GENERATED UI CODE; DO NOT MODIFY
 static Window *s_window;
 static GFont s_res_bitham_30_black;
-static GFont s_res_gothic_18;
+static GFont s_res_gothic_18_bold;
 static Layer *s_fibo_layer;
 static Layer *s_arc5x5_layer;
 static Layer *s_arc3x3_layer;
@@ -25,41 +25,41 @@ static void initialise_ui(void) {
   #ifndef PBL_SDK_3
     window_set_fullscreen(s_window, true);
   #endif
-
+  
   s_res_bitham_30_black = fonts_get_system_font(FONT_KEY_BITHAM_30_BLACK);
-  s_res_gothic_18 = fonts_get_system_font(FONT_KEY_GOTHIC_18);
+  s_res_gothic_18_bold = fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);
   // s_fibo_layer
   s_fibo_layer = layer_create(GRect(0, 0, 144, 168));
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_fibo_layer);
-
+  
   // s_arc5x5_layer
   s_arc5x5_layer = layer_create(GRect(21, 63, 101, 101));
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_arc5x5_layer);
-
+  
   // s_arc3x3_layer
   s_arc3x3_layer = layer_create(GRect(21, 3, 61, 61));
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_arc3x3_layer);
-
+  
   // s_arc2x2_layer
   s_arc2x2_layer = layer_create(GRect(81, 3, 41, 41));
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_arc2x2_layer);
-
+  
   // s_arc1x1L_layer
   s_arc1x1L_layer = layer_create(GRect(81, 43, 21, 21));
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_arc1x1L_layer);
-
+  
   // s_arc1x1R_layer
   s_arc1x1R_layer = layer_create(GRect(101, 43, 21, 21));
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_arc1x1R_layer);
-
+  
   // s_charge_layer
   s_charge_layer = layer_create(GRect(127, 144, 15, 22));
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_charge_layer);
-
+  
   // s_bluetooth_layer
   s_bluetooth_layer = layer_create(GRect(2, 144, 18, 22));
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_bluetooth_layer);
-
+  
   // s_time_layer
   s_time_layer = text_layer_create(GRect(0, 65, 144, 40));
   text_layer_set_background_color(s_time_layer, GColorClear);
@@ -68,23 +68,23 @@ static void initialise_ui(void) {
   text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
   text_layer_set_font(s_time_layer, s_res_bitham_30_black);
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_time_layer);
-
+  
   // s_date_layer
-  s_date_layer = text_layer_create(GRect(0, 96, 144, 24));
+  s_date_layer = text_layer_create(GRect(0, 97, 144, 30));
   text_layer_set_background_color(s_date_layer, GColorClear);
   text_layer_set_text_color(s_date_layer, GColorWhite);
   text_layer_set_text(s_date_layer, "16 Aug");
   text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
-  text_layer_set_font(s_date_layer, s_res_gothic_18);
+  text_layer_set_font(s_date_layer, s_res_gothic_18_bold);
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_date_layer);
-
+  
   // s_week_layer
-  s_week_layer = text_layer_create(GRect(0, 112, 144, 24));
+  s_week_layer = text_layer_create(GRect(1, 116, 144, 30));
   text_layer_set_background_color(s_week_layer, GColorClear);
   text_layer_set_text_color(s_week_layer, GColorWhite);
   text_layer_set_text(s_week_layer, "w33");
   text_layer_set_text_alignment(s_week_layer, GTextAlignmentCenter);
-  text_layer_set_font(s_week_layer, s_res_gothic_18);
+  text_layer_set_font(s_week_layer, s_res_gothic_18_bold);
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_week_layer);
 }
 
@@ -318,6 +318,8 @@ static void fibo_layer_update_callback(Layer *layer, GContext *ctx) {
   graphics_fill_rect(ctx, fibo[conf.fiboDisplay].s_1x1R_square, 0, GCornerNone);
   graphics_context_set_fill_color(ctx, fill_color[fc5]);
   text_layer_set_text_color(s_time_layer, conf.legibleText ? gcolor_legible_over(fill_color[fc5]): conf.timeColor);
+  text_layer_set_text_color(s_week_layer, conf.legibleText ? gcolor_legible_over(fill_color[fc5]): conf.timeColor);
+  text_layer_set_text_color(s_time_layer, conf.legibleText ? gcolor_legible_over(fill_color[fc5]): conf.timeColor);
   graphics_fill_rect(ctx, fibo[conf.fiboDisplay].s_5x5_square, 0, GCornerNone);
 
   // Draw the grid
@@ -404,7 +406,6 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 #endif
 
   // Update current time on the TextLayer
-  text_layer_set_text_color(s_time_layer, conf.timeColor);
   text_layer_set_text(s_time_layer, time_str);
 
   if ((tick_time != NULL) && (units_changed = DAY_UNIT)) {
