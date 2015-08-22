@@ -3,6 +3,8 @@
 
 #define USE_FIXED_TIME_FOR_PUBLISHING_IMAGE 0
 
+#define ACTIVATE_COLOR_LOOP 0
+
 // BEGIN AUTO-GENERATED UI CODE; DO NOT MODIFY
 static Window *s_window;
 static GFont s_res_bitham_30_black;
@@ -138,9 +140,9 @@ static struct {
     .s_1x1R_square = {{113,  57}, { 29,  29}}, // 1x1 Square (right)
     .s_5x5_square  = {{  1,  85}, {141,  85}}, // 5x5 Square
     .s_outline     = {{ -1,  -1}, {146, 170}}, // outline (hide it outside the view)
-    .s_time        = {{  0,  81}, {144,  40}},
-    .s_date        = {{  0, 112}, {144,  40}},
-    .s_week        = {{  0, 128}, {144,  40}},
+    .s_time        = {{  0,  84}, {144,  40}},
+    .s_date        = {{  0, 114}, {144,  40}},
+    .s_week        = {{  0, 131}, {144,  40}},
 //  }, { // FiboDispHorzontal, Not fully implemented yet (needs to rotate or move center of each arc)
 //    .s_3x3_square  = {{ 3,  75}, { 52,  52}}, // 3x3 Square
 //    .s_2x2_square  = {{ 3,  41}, { 35,  35}}, // 2x2 Square
@@ -164,6 +166,14 @@ static GBitmap *s_cross_image;
 // Global time
 static int s_curr_hour;
 static int s_curr_min;
+
+// Path
+static GColor s_legibleColor;
+static GPath *s_bat_frame_path_ptr = NULL;
+static const GPathInfo BAT_FRAME_PATH_INFO = {
+  .num_points = 8,
+  .points = (GPoint []) {{4, 0}, {9, 0}, {9, 2}, {11, 2}, {11, 21}, {2, 21}, {2, 2}, {4, 2}}
+};
 
 // Settings
 enum {  // DON'T CHANGE THE ORDER OF THESES!!!
@@ -307,6 +317,14 @@ static void fibo_layer_update_callback(Layer *layer, GContext *ctx) {
   if (m >= 1) { fc1R |= 0x02; m -= 1; }  // The order of these two lines have been swapped, intentionally
   if (m >= 1) { fc1L |= 0x02; m -= 1; }  // The order of these two lines have been swapped, intentionally
 
+#if ACTIVATE_COLOR_LOOP
+{
+  static int8_t cnt = 0;
+  fc5 = cnt;
+  cnt = (cnt == 3) ? 0 : cnt + 1;
+}
+#endif
+  
   // Draw the time boxes
   graphics_context_set_fill_color(ctx, fill_color[fc3]);
   graphics_fill_rect(ctx, fibo[conf.fiboDisplay].s_3x3_square, 0, GCornerNone);
@@ -317,9 +335,12 @@ static void fibo_layer_update_callback(Layer *layer, GContext *ctx) {
   graphics_context_set_fill_color(ctx, fill_color[fc1R]);
   graphics_fill_rect(ctx, fibo[conf.fiboDisplay].s_1x1R_square, 0, GCornerNone);
   graphics_context_set_fill_color(ctx, fill_color[fc5]);
-  text_layer_set_text_color(s_time_layer, conf.legibleText ? gcolor_legible_over(fill_color[fc5]): conf.timeColor);
-  text_layer_set_text_color(s_week_layer, conf.legibleText ? gcolor_legible_over(fill_color[fc5]): conf.timeColor);
-  text_layer_set_text_color(s_time_layer, conf.legibleText ? gcolor_legible_over(fill_color[fc5]): conf.timeColor);
+  
+  s_legibleColor = gcolor_legible_over(fill_color[fc5]); // Also used for battery frame
+  
+  text_layer_set_text_color(s_time_layer, conf.legibleText ? s_legibleColor: conf.timeColor);
+  text_layer_set_text_color(s_date_layer, conf.legibleText ? s_legibleColor: conf.timeColor);
+  text_layer_set_text_color(s_week_layer, conf.legibleText ? s_legibleColor: conf.timeColor);
   graphics_fill_rect(ctx, fibo[conf.fiboDisplay].s_5x5_square, 0, GCornerNone);
 
   // Draw the grid
@@ -357,10 +378,14 @@ static void charge_layer_update_callback(Layer *layer, GContext *ctx) {
   if (batChargeState.charge_percent >= 60) {
     charge_color = GColorGreen;
   } else if (batChargeState.charge_percent >= 25) {
-    charge_color = GColorYellow;
+    charge_color = GColorChromeYellow;
   } else {
     charge_color = GColorRed;
   }
+
+  // Fill the battery frame
+  graphics_context_set_fill_color(ctx, GColorBlack);
+  gpath_draw_filled(ctx, s_bat_frame_path_ptr);
 
   // Draw battery charge
   graphics_context_set_fill_color(ctx, charge_color);
@@ -372,9 +397,9 @@ static void charge_layer_update_callback(Layer *layer, GContext *ctx) {
   graphics_draw_pixel(ctx, GPoint(3, 1));
   graphics_draw_pixel(ctx, GPoint(10, 1));
 
-  // Draw battery outline
-  graphics_context_set_compositing_mode(ctx, GCompOpSet);
-  graphics_draw_bitmap_in_rect(ctx, s_battery_image, gbitmap_get_bounds(s_battery_image));
+  // Stroke the battery frame
+  graphics_context_set_stroke_color(ctx, (conf.fiboDisplay == FiboDispZoomed) ? s_legibleColor : GColorWhite);
+  gpath_draw_outline(ctx, s_bat_frame_path_ptr);
 
   if (batChargeState.is_charging) {
     // Draw charging icon
@@ -746,15 +771,18 @@ void show_main(void) {
   layer_set_update_proc(s_bluetooth_layer, bluetooth_layer_update_callback);
 
   // Create bitmaps
-  s_battery_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BATTERY);
   s_charging_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CHARGING);
   s_plugged_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_PLUGGED);
   s_bluetooth_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH);
   s_cross_image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CROSS);
 
   // Register with TickTimerService
+#if ACTIVATE_COLOR_LOOP
+  tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
+#else
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
-
+#endif
+  
   // Register with BatteryStateService
   battery_state_service_subscribe(battery_charge_handler);
 
@@ -769,6 +797,9 @@ void show_main(void) {
   layer_set_hidden(text_layer_get_layer(s_date_layer), !(conf.showDate || conf.showMonth));
   layer_set_hidden(text_layer_get_layer(s_week_layer), !conf.showWeekNum);
 
+  // Create used path
+  s_bat_frame_path_ptr = gpath_create(&BAT_FRAME_PATH_INFO);
+  
   // Make sure that the currnet time is displayed from the start
   time_t temp = time(NULL);
   struct tm *tick_time = localtime(&temp);
