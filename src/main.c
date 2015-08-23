@@ -401,6 +401,7 @@ static void charge_layer_update_callback(Layer *layer, GContext *ctx) {
   graphics_context_set_stroke_color(ctx, (conf.fiboDisplay == FiboDispZoomed) ? s_legibleColor : GColorWhite);
   gpath_draw_outline(ctx, s_bat_frame_path_ptr);
 
+  graphics_context_set_compositing_mode(ctx, GCompOpSet);
   if (batChargeState.is_charging) {
     // Draw charging icon
     graphics_draw_bitmap_in_rect(ctx, s_charging_image, gbitmap_get_bounds(s_charging_image));
