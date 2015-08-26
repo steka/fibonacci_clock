@@ -1,10 +1,9 @@
 Bugs:
 Found	Fixed	Description
 N/A	[ ]	N/A
-		
+
 New features:
 Done	Description
 [ ]	Better looking color selection on config page (that show all colors on phone)
-[ ]	Random between valid ways of colouring the boxes.
 [ ]	Rotate the image 90° counter-clockwise, to for text info above/below
 	(Tried it, but it became too small, I think. Code #ifdef'ed out)

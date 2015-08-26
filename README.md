@@ -1,6 +1,4 @@
 # Fibonacci Clock
 A fibonacci clock for Pebble Time
 
-![Fibonacci Clock](/Fibonacci_Clock.png)
-
-![Fibonacci Clock (zoomed)](/Fibonacci_Clock1.png)
+![Fibonacci Clock](Fibonacci_Clock_Watch.png) ![Fibonacci Clock (zoomed)](Fibonacci_Clock1_Watch.png)
