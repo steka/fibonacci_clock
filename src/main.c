@@ -130,9 +130,9 @@ static struct {
     .s_1x1R_square = {{101,  43}, { 21,  21}}, // 1x1 Square (right)
     .s_5x5_square  = {{ 21,  63}, {101, 101}}, // 5x5 Square
     .s_outline     = {{ 19,   1}, {105, 165}}, // outline
-    .s_time        = {{  0,  65}, {144,  40}},
-    .s_date        = {{  0,  96}, {144,  40}},
-    .s_week        = {{  0, 112}, {144,  40}},
+    .s_time        = {{  0,  62}, {144,  40}},
+    .s_date        = {{  0,  93}, {144,  40}},
+    .s_week        = {{  0, 109}, {144,  40}},
   }, { // FiboDispZoomed
     .s_3x3_square  = {{  1,   1}, { 85,  85}}, // 3x3 Square
     .s_2x2_square  = {{ 85,   1}, { 57,  57}}, // 2x2 Square
@@ -293,30 +293,212 @@ static void bluetooth_layer_update_callback(Layer *layer, GContext *ctx) {
   }
 }
 
+static void fibo_color(int8_t n, uint8_t mask, int8_t *fc1L, int8_t *fc1R, int8_t *fc2, int8_t *fc3, int8_t *fc5) {
+  switch (n) {
+    case 1: {
+      if (rand() % 2) {
+        *fc1L |= mask;
+      } else {
+        *fc1R |= mask;
+      }
+    } break;
+    case 2: {
+      if (rand() % 2) {
+        *fc2 |= mask;
+      } else {
+        *fc1L |= mask;
+        *fc1R |= mask;
+      }
+    } break;
+    case 3: {
+      switch (rand() % 3) {
+        case 0: {
+          *fc3 |= mask;
+        } break;
+        case 1: {
+          *fc1R |= mask;
+          *fc2 |= mask;
+        } break;
+        default: {
+          *fc1L |= mask;
+          *fc2 |= mask;
+        } break;
+      }
+    } break;
+    case 4: {
+      switch (rand() % 3) {
+        case 0: {
+          *fc1R |= mask;
+          *fc3 |= mask;
+        } break;
+        case 1: {
+          *fc1L |= mask;
+          *fc3 |= mask;
+        } break;
+        default: {
+          *fc1L |= mask;
+          *fc1R |= mask;
+          *fc2 |= mask;
+        } break;
+      }
+    } break;
+    case 5: {
+      switch (rand() % 3) {
+        case 0: {
+          *fc5 |= mask;
+        } break;
+        case 1: {
+          *fc2 |= mask;
+          *fc3 |= mask;
+        } break;
+        default: {
+          *fc1L |= mask;
+          *fc1R |= mask;
+          *fc3 |= mask;
+        } break;
+      }
+    } break;
+    case 6: {
+      switch (rand() % 4) {
+        case 0: {
+          *fc1R |= mask;
+          *fc5 |= mask;
+        } break;
+        case 1: {
+          *fc1L |= mask;
+          *fc5 |= mask;
+        } break;
+        case 2: {
+          *fc1R |= mask;
+          *fc2 |= mask;
+          *fc3 |= mask;
+        } break;
+        default: {
+          *fc1L |= mask;
+          *fc2 |= mask;
+          *fc3 |= mask;
+        } break;
+      }
+    } break;
+    case 7: {
+      switch (rand() % 3) {
+        case 0: {
+          *fc2 |= mask;
+          *fc5 |= mask;
+        } break;
+        case 1: {
+          *fc1L |= mask;
+          *fc1R |= mask;
+          *fc5 |= mask;
+        } break;
+        default: {
+          *fc1L |= mask;
+          *fc1R |= mask;
+          *fc2 |= mask;
+          *fc3 |= mask;
+        } break;
+      }
+    } break;
+    case 8: {
+      switch (rand() % 3) {
+        case 0: {
+          *fc3 |= mask;
+          *fc5 |= mask;
+        } break;
+        case 1: {
+          *fc1L |= mask;
+          *fc2 |= mask;
+          *fc5 |= mask;
+        } break;
+        default: {
+          *fc1R |= mask;
+          *fc2 |= mask;
+          *fc5 |= mask;
+        } break;
+      }
+    } break;
+    case 9: {
+      switch (rand() % 3) {
+        case 0: {
+          *fc1L |= mask;
+          *fc3 |= mask;
+          *fc5 |= mask;
+        } break;
+        case 1: {
+          *fc1R |= mask;
+          *fc3 |= mask;
+          *fc5 |= mask;
+        } break;
+        default: {
+          *fc1L |= mask;
+          *fc1R |= mask;
+          *fc2 |= mask;
+          *fc5 |= mask;
+        } break;
+      }
+    } break;
+    case 10: {
+      if (rand() % 2) {
+        *fc2 |= mask;
+        *fc3 |= mask;
+        *fc5 |= mask;
+      } else {
+        *fc1L |= mask;
+        *fc1R |= mask;
+        *fc3 |= mask;
+        *fc5 |= mask;
+      }
+    } break;
+    case 11: {
+      if (rand() % 2) {
+        *fc1L |= mask;
+        *fc2 |= mask;
+        *fc3 |= mask;
+        *fc5 |= mask;
+      } else {
+        *fc1R |= mask;
+        *fc2 |= mask;
+        *fc3 |= mask;
+        *fc5 |= mask;
+      }
+    } break;
+    case 12: {
+      *fc1L |= mask;
+      *fc1R |= mask;
+      *fc2 |= mask;
+      *fc3 |= mask;
+      *fc5 |= mask;
+    } break;
+  }
+}
+
+static void get_fibo_colors(int8_t h, int8_t m, int8_t *fc1L, int8_t *fc1R, int8_t *fc2, int8_t *fc3, int8_t *fc5) {
+  // Determine what fill color to use in each box
+  fibo_color(h, 0x01, fc1L, fc1R, fc2, fc3, fc5);
+  fibo_color(m, 0x02, fc1L, fc1R, fc2, fc3, fc5);
+}
+
 static void fibo_layer_update_callback(Layer *layer, GContext *ctx) {
   GColor fill_color[4]; // None, Hour, Minute, Hr+Min
-  int8_t fc1L = 0, fc1R = 0, fc2 = 0, fc3 = 0, fc5 = 0;
-  int8_t h = s_curr_hour;
-  int8_t m = s_curr_min / 5; // Since only values from 1-12 can be displayed
+  static int8_t h, m, fc1L, fc1R, fc2, fc3, fc5;
 
   fill_color[0] = conf.noneColor;
   fill_color[1] = conf.hourColor;
   fill_color[2] = conf.minuteColor;
   fill_color[3] = conf.hourMinuteColor;
 
-  // Determine what fill color to use in each box
-  if (h >= 5) { fc5  |= 0x01; h -= 5; }
-  if (h >= 3) { fc3  |= 0x01; h -= 3; }
-  if (h >= 2) { fc2  |= 0x01; h -= 2; }
-  if (h >= 1) { fc1L |= 0x01; h -= 1; }
-  if (h >= 1) { fc1R |= 0x01; h -= 1; }
-
-  if (m >= 5) { fc5  |= 0x02; m -= 5; }
-  if (m >= 3) { fc3  |= 0x02; m -= 3; }
-  if (m >= 2) { fc2  |= 0x02; m -= 2; }
-  if (m >= 1) { fc1R |= 0x02; m -= 1; }  // The order of these two lines have been swapped, intentionally
-  if (m >= 1) { fc1L |= 0x02; m -= 1; }  // The order of these two lines have been swapped, intentionally
-
+  /* Only get new random combination on time change */
+  if (h != s_curr_hour) {
+    h = s_curr_hour;
+    m = s_curr_min / 5; // Divide by five since only values from 1-12 can be displayed
+    fc1L = fc1R = fc2 = fc3 = fc5 = 0;
+    get_fibo_colors(h, m, &fc1L, &fc1R, &fc2, &fc3, &fc5);
+  } else if (m != s_curr_min / 5) {
+    m = s_curr_min / 5; // Divide by five since only values from 1-12 can be displayed
+    fc1L = fc1R = fc2 = fc3 = fc5 = 0;
+    get_fibo_colors(h, m, &fc1L, &fc1R, &fc2, &fc3, &fc5);
+  }
+    
 #if ACTIVATE_COLOR_LOOP
 {
   static int8_t cnt = 0;
@@ -398,7 +580,7 @@ static void charge_layer_update_callback(Layer *layer, GContext *ctx) {
   graphics_draw_pixel(ctx, GPoint(10, 1));
 
   // Stroke the battery frame
-  graphics_context_set_stroke_color(ctx, (conf.fiboDisplay == FiboDispZoomed) ? s_legibleColor : GColorWhite);
+  graphics_context_set_stroke_color(ctx, (conf.fiboDisplay == FiboDispZoomed) ? s_legibleColor : gcolor_legible_over(conf.backgroundColor));
   gpath_draw_outline(ctx, s_bat_frame_path_ptr);
 
   graphics_context_set_compositing_mode(ctx, GCompOpSet);
@@ -436,9 +618,14 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 
   if ((tick_time != NULL) && (units_changed = DAY_UNIT)) {
     strftime(date_str, sizeof(date_str), "%a %d %b", tick_time);
-    text_layer_set_text(s_date_layer, date_str);
-
+#if USE_FIXED_TIME_FOR_PUBLISHING_IMAGE
+  strcpy(date_str, "Sun 16 Aug");
+#endif
+  text_layer_set_text(s_date_layer, date_str);
     strftime(week_str, sizeof(week_str), "w%V", tick_time);
+#if USE_FIXED_TIME_FOR_PUBLISHING_IMAGE
+  strcpy(week_str, "w33");
+#endif
     text_layer_set_text(s_week_layer, week_str);
   }
   layer_mark_dirty(s_fibo_layer);
