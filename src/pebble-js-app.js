@@ -3,7 +3,7 @@ Pebble.addEventListener('ready', function(e) {
 });
 
 Pebble.addEventListener('showConfiguration', function(e) {
-  Pebble.openURL('https://www.googledrive.com/host/0By3m2JcE6XQ6QnRuLVh6Vy1fTG8');
+  Pebble.openURL('https://steka.github.io/fibonacci_clock/config.htm');
 });
 
 Pebble.addEventListener('webviewclosed', function(e) {
